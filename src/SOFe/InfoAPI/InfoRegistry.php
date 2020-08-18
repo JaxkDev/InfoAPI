@@ -58,6 +58,7 @@ class InfoRegistry{
 		PositionInfo::register($this);
 		RatioInfo::register($this);
 		StringInfo::register($this);
+		CommonInfo::register($this);
 	}
 
 	public function addDetail(string $parentClass, string $name, Closure $childGetter) : void{
@@ -106,13 +107,15 @@ class InfoRegistry{
 	public function resolve(array $tokens, Info $info) : ?string{
 		if(isset($this->graph[$class = get_class($info)])){
 			foreach($this->graph[$class] as $name => $closure){
-				if(strpos($tokens . " ", $name . " ") === 0){
+				if (strpos(implode(" ", $tokens) . " ", $name . " ") === 0) {
 					/** @var Info|null $delegate */
 					$delegate = $closure($info);
-					if($delegate !== null){
+					if ($delegate !== null) {
 						$result = $this->resolve(array_slice($tokens, substr_count($name, " ") + 1), $delegate);
-						if($result !== null){
+						if ($result !== null) {
 							return $result;
+						} else {
+							return $delegate->toString();
 						}
 					}
 				}
@@ -127,6 +130,8 @@ class InfoRegistry{
 					$result = $this->resolve($tokens, $delegate);
 					if($result !== null){
 						return $result;
+					} else {
+						return $delegate->toString();
 					}
 				}
 			}
@@ -181,7 +186,6 @@ class InfoRegistry{
 						continue;
 					}
 
-					/** @noinspection PhpUnusedLocalVariableInspection */
 					$thatName = $thatDetail->increasePrecision($joined);
 					$used[$thatName] = $collisionIndex;
 

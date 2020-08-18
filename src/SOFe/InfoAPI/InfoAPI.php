@@ -109,7 +109,7 @@ final class InfoAPI{
 		}
 
 		foreach($fallbackInfos as $info){
-			$result = InfoRegistry::getInstance()->resolve(explode(" ", $iden), $info);
+			$result = InfoRegistry::getInstance()->resolve(explode(" ", $iden), $info());
 			if($result !== null){
 				return $result;
 			}
