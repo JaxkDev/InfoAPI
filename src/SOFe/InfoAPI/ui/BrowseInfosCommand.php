@@ -26,10 +26,10 @@ use dktapps\pmforms\MenuOption;
 use Generator;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
-use pocketmine\command\PluginIdentifiableCommand;
 use pocketmine\command\utils\InvalidCommandSyntaxException;
 use pocketmine\player\Player;
 use pocketmine\plugin\Plugin;
+use pocketmine\plugin\PluginOwned;
 use pocketmine\utils\TextFormat;
 use SOFe\AwaitGenerator\Await;
 use SOFe\InfoAPI\Info;
@@ -40,7 +40,7 @@ use function implode;
 use function strlen;
 use function substr;
 
-class BrowseInfosCommand extends Command implements PluginIdentifiableCommand{
+class BrowseInfosCommand extends Command implements PluginOwned{
 	/** @var Plugin */
 	private $plugin;
 
@@ -112,7 +112,7 @@ class BrowseInfosCommand extends Command implements PluginIdentifiableCommand{
 		return new MenuForm($title, $value, $options, $onSubmit, $onClose);
 	}
 
-	public function getPlugin() : Plugin{
+	public function getOwningPlugin(): Plugin{
 		return $this->plugin;
 	}
 }

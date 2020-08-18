@@ -71,14 +71,14 @@ class PlayerInfo extends Info{
 			return new NumberInfo($info->player->getLocation()->getYaw());
 		});
 		$registry->addDetail(self::class, "pocketmine.player.pitch", static function(PlayerInfo $info){
-			return new NumberInfo($info->player->getPitch());
+			return new NumberInfo($info->player->getLocation()->getPitch());
 		});
 		$registry->addDetail(self::class, "pocketmine.player.eye", static function(PlayerInfo $info){
 			$position = $info->player->getPosition();
 			return new PositionInfo(Position::fromObject($position->add(0, $info->player->getEyeHeight(), 0), $position->getWorld()));
 		});
 		$registry->addDetail(self::class, "pocketmine.player.block below", static function(PlayerInfo $info){
-			$position = $info->player->asPosition();
+			$position = $info->player->getPosition();
 			$below = $position->floor()->subtract(0, 1, 0);
 			if($below->y > World::Y_MAX){
 				$below->y = World::Y_MAX;
@@ -93,7 +93,7 @@ class PlayerInfo extends Info{
 			"pocketmine.player.facing block",
 			"pocketmine.player.block facing"
 		], static function(PlayerInfo $info){
-			$src = $info->player->asPosition();
+			$src = $info->player->getPosition();
 			/** @var World $world */
 			$world = $src->getWorld();
 			$src = $src->add(0, $info->player->getEyeHeight(), 0);
@@ -108,7 +108,7 @@ class PlayerInfo extends Info{
 		});
 
 		$registry->addFallback(self::class, static function(PlayerInfo $info){
-			return new PositionInfo($info->player->asPosition());
+			return new PositionInfo($info->player->getPosition());
 		});
 	}
 

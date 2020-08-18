@@ -60,7 +60,7 @@ class BlockInfo extends Info{
 		});
 
 		$registry->addFallback(self::class, static function(BlockInfo $info){
-			return $info->hasPosition ? new PositionInfo($info->block) : null;
+			return $info->hasPosition ? new PositionInfo($info->block->getPos()) : null;
 		});
 	}
 }
